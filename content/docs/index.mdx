@@ -1,13 +1,72 @@
 ---
-title: Hello World
-description: Your first document
+title: Designing & Dungeons
+description: UI Stuff! First Post in like 10 years!
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+I love dungeons and dragons. It's a fun, inventive game with simple enough mechanics. But no matter how 
+much time I spend in planning adventures or playing them with my friends, I frequently forget
+what abilities are responsible for what scenarios, what the modifier would be, etc. Looking it up can interrupt the flow
+of the game. So what other ways can this information be displayed?
 
-## What is Next?
+## Periodic Table
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.vercel.app" />
-</Cards>
+Back in high school I was not terribly interested in Chemistry, but the periodic table 
+was a graphic where it gave me the first understanding of a design that was both appealing (a clear grid of elements)
+and informative (each level representing # of electrons/atomic weight, etc).
+
+<div className="periodic-example">
+
+<div className="dnd-card element">
+    <div className="atomic-number">1</div>
+    <h3>H</h3>
+    <div>Helium</div>
+    <span>1.0</span>
+</div>
+</div>
+
+D&D abilities are not atomic elements, so less information is needed. Just name, abbreviation, score and modifier.
+
+## Ability
+<DNDCardList>
+    <DNDCard
+        abbrev="STR" 
+        name="Strength"
+        modifier={1}
+        score={12}
+    />
+
+    <DNDCard
+        abbrev="WIS" 
+        name="Wisdom"
+        modifier={3}
+        score={16}
+    />
+
+    <DNDCard
+        abbrev="DEX" 
+        name="Dexterity"
+        modifier={2}
+        score={15}
+    />
+
+    <DNDCard
+        abbrev="INT" 
+        name="Intelligence"
+        modifier={0}
+        score={10}
+    />
+
+    <DNDCard
+        abbrev="CHA" 
+        name="Charisma"
+        modifier={-1}
+        score={8}
+    />
+
+    <DNDCard
+        abbrev="CON" 
+        name="Constitution"
+        modifier={3}
+        score={16}
+    />
+</DNDCardList>

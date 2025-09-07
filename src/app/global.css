@@ -1,3 +1,46 @@
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
+
+.dnd-card {
+  border-right: 1px solid white;
+  padding: 1em;
+  height: 148px;
+  text-align: center;
+}
+
+.table-view {
+  display: grid;
+  max-width: fit-content;
+  grid-template-columns: repeat(6, 1fr);
+  border: 1px solid white;
+}
+
+.periodic-example {
+  display: flex;
+  justify-content: center;
+}
+
+.dnd-card.element {
+  border: 1px solid white;
+  width: 128px;
+}
+
+.dnd-card.element .atomic-number {
+  float: left;
+  position: relative;
+  top: -12px;
+  left: -10px;
+} 
+
+.dnd-card .score {
+  font-size: xx-large;
+}
+
+.table-view .dnd-card:last-child {
+  border-right: none;
+}
+
+.dnd-card > h3, h5, h6 {
+  margin: 0;
+}

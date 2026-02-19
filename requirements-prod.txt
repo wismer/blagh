@@ -1,0 +1,2 @@
+# Requirements for production deployment
+gunicorn==21.2.0

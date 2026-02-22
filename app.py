@@ -317,8 +317,10 @@ def get_emails():
             'error': str(e)
         }), 500
 
+
+if __name__ == '__main__':
     app.run(
-        host='0.0.0.0',  # Allow connections from any device on the network
-        port=5000,
+        host='0.0.0.0',
+        port=8080,
         debug=True
     )

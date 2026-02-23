@@ -21,7 +21,7 @@ CORS(app)  # Enable CORS for development
 # Configuration
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://matt@localhost:5432/daily_discover')
-GMAIL_REDIRECT_URI = os.environ.get('GMAIL_REDIRECT_URI', 'http://localhost:5000/oauth2callback')
+GMAIL_REDIRECT_URI = os.environ.get('GMAIL_REDIRECT_URI', 'http://localhost:8080/oauth2callback')
 
 # Initialize database connection pool
 init_db_pool(DATABASE_URL)

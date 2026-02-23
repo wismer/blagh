@@ -11,10 +11,10 @@
 **Duration**: 1-2 weeks (part-time)
 
 ### Tasks:
-- [ ] Research Gmail API feasibility (RESEARCH.md #1)
-- [ ] Research Calendar API integration (RESEARCH.md #3)
-- [ ] Choose technology stack (RESEARCH.md #5)
-- [ ] Design database schema
+- [x] Research Gmail API feasibility (RESEARCH.md #1)
+- [x] Research Calendar API integration (RESEARCH.md #3)
+- [x] Choose technology stack (RESEARCH.md #5)
+- [~] Design database schema
 - [ ] Plan security approach (RESEARCH.md #4)
 - [ ] Document findings in this project structure
 
@@ -72,7 +72,7 @@ Code structure:
 ```bash
 # Run locally first
 python app/main.py
-# Open http://localhost:5000
+# Open http://localhost:8080
 # Add some TODOs and shopping items
 # Restart server
 # Verify data persists
@@ -80,58 +80,41 @@ python app/main.py
 
 ---
 
-## Phase 2: Gmail Integration 📧
-**Goal**: Display unread emails from last 20 days  
-**Duration**: 3-5 days
+## ~~Phase 2: Gmail Integration~~ 📧 **[DEPRECATED - See DECISIONS.md 2026-02-23]**
+~~**Goal**: Display unread emails from last 20 days~~  
+~~**Duration**: 3-5 days~~
 
-### Prerequisites:
-- ✓ Phase 1 complete and working
-- ✓ Gmail API research done (RESEARCH.md #1)
-- ✓ Google Cloud project created with Gmail API enabled
-- ✓ OAuth2 credentials obtained
-
-### Features:
-- [ ] Authenticate with Gmail API (OAuth2 flow)
-- [ ] Background job: Fetch unread emails every 10 minutes
-- [ ] Display email list in dashboard (subject, sender, snippet)
-- [ ] Click email to view full content in dashboard
-- [ ] "Reply in Gmail" button opens Gmail web interface
-- [ ] Cache emails locally (avoid excessive API calls)
-
-### Success Criteria:
-- ✓ Dashboard shows current unread emails
-- ✓ Clicking email displays readable content
-- ✓ OAuth2 authentication works (initial setup)
-- ✓ Emails auto-refresh without manual intervention
-- ✓ Respects Gmail API rate limits
-
-### Technical Decisions Needed:
-- [ ] OAuth2 token storage location
-- [ ] How to handle expired tokens (auto-refresh)
-- [ ] Email caching duration
+**Decision**: Replaced with Blog section (see Phase 2A below)
 
 ---
 
-## Phase 3: Calendar Integration 📅
-**Goal**: Display today's events and upcoming events (3-5 days)  
+## Phase 2A: Blog Section ✍️
+**Goal**: Personal blog for writing and publishing content  
 **Duration**: 2-3 days
 
 ### Prerequisites:
-- ✓ Phase 2 complete
-- ✓ Google Calendar API research done (RESEARCH.md #3)
+- ✓ Phase 1 complete and working
+- ✓ Database schema updated with blog tables
 
 ### Features:
-- [ ] Use same OAuth2 flow as Gmail (shared credentials)
-- [ ] Background job: Fetch calendar events every 30 minutes
-- [ ] Display "Today's Events" section
-- [ ] Display "Upcoming Events" section (3-5 days out)
-- [ ] Cache events locally
+- [ ] Create blog posts with title, content (markdown), and tags
+- [ ] Edit and delete blog posts
+- [ ] List all blog posts (sorted by date)
+- [ ] View individual blog post (markdown rendered to HTML)
+- [ ] Draft vs. Published status
+- [ ] Search/filter posts by tags or date
 
 ### Success Criteria:
-- ✓ Dashboard shows today's calendar events
-- ✓ Upcoming events displayed separately
-- ✓ Events refresh automatically
-- ✓ Handles all-day events vs. timed events
+- ✓ Can create, edit, delete blog posts via web UI
+- ✓ Markdown renders correctly to HTML
+- ✓ Posts persist in database
+- ✓ Clean reading experience
+- ✓ Mobile-friendly design
+
+### Technical Stack:
+- Database: Add `blog_posts` table to PostgreSQL
+- Markdown: Use `markdown` or `markdown-it` library for rendering
+- Editor: Simple textarea initially (can upgrade to rich editor later)
 
 ---
 
@@ -144,18 +127,13 @@ python app/main.py
 - ✓ Raspberry Pi hardware acquired and set up
 
 ### Tasks:
-- [ ] Set up Raspberry Pi OS
-- [ ] Install Python and dependencies
-- [ ] Transfer code to Raspberry Pi
-- [ ] Configure server to bind to 0.0.0.0 (all interfaces)
+- [x] Set up Raspberry Pi OS
+- [x] Install Python and dependencies
+- [x] Transfer code to Raspberry Pi
+- [x] Configure server to bind to 0.0.0.0 (all interfaces)
 - [ ] Set up systemd service (auto-start on boot)
-- [ ] Configure mDNS (access via raspberrypi.local)
-- [ ] Test access from phone/laptop on same WiFi
-
-### Security:
-- [ ] Add HTTP Basic Authentication
-- [ ] Store OAuth2 tokens securely
-- [ ] Consider self-signed HTTPS certificate
+- [x] Configure mDNS (access via raspberrypi.local)
+- [x] Test access from phone/laptop on same WiFi
 
 ### Success Criteria:
 - ✓ Dashboard accessible from phone via WiFi
@@ -166,7 +144,7 @@ python app/main.py
 ### Testing:
 ```bash
 # From phone on same WiFi
-http://raspberrypi.local:5000
+http://raspberrypi.local:8080
 
 # Verify all features work:
 # - Add/remove TODOs
@@ -190,7 +168,7 @@ http://raspberrypi.local:5000
 - [ ] Create iOS Shortcut:
   - Trigger: "Hey Siri, tell Buddy to..."
   - Dictate text
-  - POST to http://raspberrypi.local:5000/api/voice/command
+  - POST to http://raspberrypi.local:8080/api/voice/command
   - Show confirmation
 
 ### Supported Commands (MVP):

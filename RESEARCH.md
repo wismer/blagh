@@ -70,7 +70,7 @@ Example:
 ```
 Example:
 RECOMMENDED: Start with iOS Shortcuts (simplest, no extra hardware)
-- Shortcut can POST to http://raspberrypi.local:5000/add-item
+- Shortcut can POST to http://raspberrypi.local:8080/add-item
 - No custom app needed
 - Wake word: Use iOS "Hey Siri" trigger
 - Fallback: Add USB mic + Vosk for standalone solution

@@ -232,7 +232,7 @@ sudo certbot renew --dry-run
 journalctl -u daily-discover -n 50
 
 # Check if port is in use
-sudo netstat -tlnp | grep 5000
+sudo netstat -tlnp | grep 8080
 
 # Verify database connection
 sudo -u pi psql -h localhost -d daily_discover -U daily_discover_user
@@ -283,7 +283,7 @@ sudo nginx -t
 
 Edit `/etc/systemd/system/daily-discover.service`:
 ```
-ExecStart=/home/pi/daily-discover/venv/bin/gunicorn --bind 127.0.0.1:5000 --workers 4 --timeout 120 app:app
+ExecStart=/home/pi/daily-discover/venv/bin/gunicorn --bind 127.0.0.1:8080 --workers 4 --timeout 120 app:app
 ```
 
 Then reload:

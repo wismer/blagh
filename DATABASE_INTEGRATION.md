@@ -43,27 +43,27 @@
 
 **Add a Grocery Item:**
 ```bash
-curl -X POST http://localhost:5000/api/groceries \
+curl -X POST http://localhost:8080/api/groceries \
   -H "Content-Type: application/json" \
   -d '{"item_name": "milk", "quantity": 2}'
 ```
 
 **Add a TODO:**
 ```bash
-curl -X POST http://localhost:5000/api/todos \
+curl -X POST http://localhost:8080/api/todos \
   -H "Content-Type: application/json" \
   -d '{"text": "Buy groceries", "priority": 1}'
 ```
 
 **Voice Input (iOS Shortcuts):**
 ```bash
-curl -X POST http://localhost:5000/api/voice-input \
+curl -X POST http://localhost:8080/api/voice-input \
   -H "Content-Type: application/json" \
   -d '{"type": "groceries", "items": ["milk", "bread", "eggs"]}'
 ```
 
 ### View Dashboard
-Open http://localhost:5000 in your browser to see:
+Open http://localhost:8080 in your browser to see:
 - Active grocery list
 - Incomplete TODOs
 - Server health status

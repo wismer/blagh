@@ -12,9 +12,9 @@ git pull
 
 # 2. Install Python dependencies
 echo "🐍 Installing Python dependencies..."
-source venv/bin/activate
-pip install -r requirements.txt
-pip install -r requirements-prod.txt
+source .venv/bin/activate
+uv install -r requirements.txt
+uv install -r requirements-prod.txt
 
 # 3. Install Node dependencies and build Next.js
 echo "📦 Installing Node dependencies..."

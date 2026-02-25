@@ -189,7 +189,7 @@ tail -f /var/log/nginx/daily-discover-error.log
 ### Update Application
 
 ```bash
-cd /home/pi/daily-discover
+cd /home/blagh
 git pull origin main
 source venv/bin/activate
 pip install -r requirements.txt
@@ -283,7 +283,7 @@ sudo nginx -t
 
 Edit `/etc/systemd/system/daily-discover.service`:
 ```
-ExecStart=/home/pi/daily-discover/venv/bin/gunicorn --bind 127.0.0.1:8080 --workers 4 --timeout 120 app:app
+ExecStart=/home/blagh/venv/bin/gunicorn --bind 127.0.0.1:8080 --workers 4 --timeout 120 app:app
 ```
 
 Then reload:

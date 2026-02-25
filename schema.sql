@@ -72,7 +72,7 @@ CREATE TABLE calendar_events (
     synced_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Email cache (from Gmail API)
+-- Email cache (from Gmail API) - DEPRECATED, see DECISIONS.md
 CREATE TABLE email_cache (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
@@ -89,6 +89,21 @@ CREATE TABLE email_cache (
     synced_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Blog posts metadata (content stored as markdown files)
+CREATE TABLE blog_posts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    slug VARCHAR(255) UNIQUE NOT NULL, -- URL-friendly identifier
+    title VARCHAR(500) NOT NULL,
+    excerpt TEXT, -- Short summary/preview
+    file_path VARCHAR(500) NOT NULL, -- Path to markdown file relative to posts/
+    published_at TIMESTAMP WITH TIME ZONE,
+    is_draft BOOLEAN DEFAULT TRUE,
+    tags TEXT[], -- Array of tag names
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Activity log for observability
 CREATE TABLE activity_log (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -98,7 +113,11 @@ CREATE TABLE activity_log (
     entity_id UUID,
     details JSONB, -- Flexible JSON for additional context
     ip_address INET,
-    user_agent TEXT,
+    user_agent TEblog_posts_user_id ON blog_posts(user_id);
+CREATE INDEX idx_blog_posts_slug ON blog_posts(slug);
+CREATE INDEX idx_blog_posts_published_at ON blog_posts(published_at);
+CREATE INDEX idx_blog_posts_is_draft ON blog_posts(is_draft);
+CREATE INDEX idx_XT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -135,7 +154,10 @@ CREATE TRIGGER update_todos_updated_at BEFORE UPDATE ON todos
 CREATE TRIGGER update_grocery_items_updated_at BEFORE UPDATE ON grocery_items
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_calendar_events_updated_at BEFORE UPDATE ON calendar_events
+CREATE TRIGGER update_calendar_events_updated_at BEFORE UPDAT
+
+CREATE TRIGGER update_blog_posts_updated_at BEFORE UPDATE ON blog_posts
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();E ON calendar_events
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_email_cache_updated_at BEFORE UPDATE ON email_cache

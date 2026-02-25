@@ -11,12 +11,31 @@ from gmail_service import (
     get_cached_emails,
     is_authenticated
 )
+from blog_service import (
+    scan_and_sync_posts,
+    get_all_posts,
+    get_post_by_slug,
+    get_posts_by_tag,
+    get_all_tags
+)
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for development
+
+# Enable CORS for Next.js dev server (port 3000) and production
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "http://localhost:3000",  # Next.js dev server
+            "http://localhost:8080",  # Flask dev server
+            os.environ.get('FRONTEND_URL', 'https://yourdomain.com')  # Production
+        ],
+        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # Configuration
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
@@ -310,6 +329,95 @@ def get_emails():
             'success': True,
             'emails': emails,
             'count': len(emails)
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+# Blog routes
+@app.route('/api/posts')
+def get_posts():
+    """Get all blog posts"""
+    tag = request.args.get('tag')
+    
+    try:
+        if tag:
+            posts = get_posts_by_tag(DEFAULT_USER_ID, tag)
+        else:
+            posts = get_all_posts(DEFAULT_USER_ID, include_drafts=False)
+        
+        return jsonify({
+            'success': True,
+            'posts': posts,
+            'count': len(posts)
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@app.route('/api/posts/<slug>')
+def get_post(slug):
+    """Get a single blog post by slug"""
+    try:
+        post = get_post_by_slug(DEFAULT_USER_ID, slug)
+        
+        if not post:
+            return jsonify({
+                'success': False,
+                'error': 'Post not found'
+            }), 404
+        
+        return jsonify({
+            'success': True,
+            'post': post
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@app.route('/api/posts/sync', methods=['POST'])
+def sync_posts():
+    """Scan posts directory and sync with database"""
+    try:
+        count = scan_and_sync_posts(DEFAULT_USER_ID)
+        
+        ActivityLog.create(
+            DEFAULT_USER_ID,
+            action='posts_synced',
+            entity_type='blog',
+            details={'posts_synced': count}
+        )
+        
+        return jsonify({
+            'success': True,
+            'message': f'Synced {count} posts',
+            'count': count
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+@app.route('/api/tags')
+def get_tags():
+    """Get all blog tags"""
+    try:
+        tags = get_all_tags(DEFAULT_USER_ID)
+        return jsonify({
+            'success': True,
+            'tags': tags,
+            'count': len(tags)
         })
     except Exception as e:
         return jsonify({

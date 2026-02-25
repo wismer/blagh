@@ -1,0 +1,16 @@
+[Unit]
+Description=Daily Discover Next.js Frontend
+After=network.target daily-discover-flask.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/blagh
+Environment="NODE_ENV=production"
+ExecStart=/usr/bin/npm start
+
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

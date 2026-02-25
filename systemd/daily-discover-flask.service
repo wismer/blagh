@@ -1,0 +1,21 @@
+[Unit]
+Description=Daily Discover Flask Backend
+After=network.target postgresql.service
+
+[Service]
+Type=notify
+User=pi
+WorkingDirectory=/home/blagh
+Environment="PATH=/home/blagh/.venv/bin"
+ExecStart=/home/blagh/venv/bin/gunicorn asgi:application \
+    -w 2 \
+    -k uvicorn.workers.UvicornWorker \
+    --bind 0.0.0.0:8080 \
+    --access-logfile /var/log/daily-discover/flask-access.log \
+    --error-logfile /var/log/daily-discover/flask-error.log
+
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

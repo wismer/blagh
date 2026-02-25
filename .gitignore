@@ -50,5 +50,7 @@ Thumbs.db
 # Logs
 *.log
 
-# deploy
+# Deploy and systemd configs (contains system-specific paths)
 deploy.sh
+systemd/*.service
+!systemd/*.service.example

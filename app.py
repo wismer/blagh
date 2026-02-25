@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session, send_from_directory
 from flask_cors import CORS
 import os
 from datetime import datetime
@@ -48,9 +48,30 @@ init_db_pool(DATABASE_URL)
 # For demo purposes, use a default user ID (in production, this would come from authentication)
 DEFAULT_USER_ID = '00000000-0000-0000-0000-000000000001'
 
+# ============================================================================
+# STATIC BLOG ROUTES (Pelican-generated at root)
+# ============================================================================
+
 @app.route('/')
-def index():
-    """Main dashboard page"""
+def blog_index():
+    """Serve Pelican blog index at root"""
+    return send_from_directory('static/blog', 'index.html')
+
+@app.route('/<path:filename>')
+def serve_blog_or_static(filename):
+    """Serve Pelican blog posts and static assets"""
+    # Skip API and dashboard routes
+    if filename.startswith('api/') or filename.startswith('dashboard'):
+        return None
+    return send_from_directory('static/blog', filename)
+
+# ============================================================================
+# WEB ROUTES
+# ============================================================================
+
+@app.route('/dashboard')
+def dashboard():
+    """Protected dashboard page - secure via Cloudflare"""
     return render_template('index.html')
 
 @app.route('/api/health')

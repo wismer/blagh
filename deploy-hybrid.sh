@@ -2,8 +2,12 @@
 # Production deployment script for Raspberry Pi
 
 set -e  # Exit on error
+set -o pipefail  # Catch errors in pipes
 
-echo "🚀 Deploying Daily Discover (Hybrid Mode)"
+# Error handler - shows which command failed
+trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
+
+echo "🚀 Deploying Daily Discover (Flask + Pelican)"
 echo ""
 
 # 1. Update code
@@ -12,39 +16,30 @@ git pull
 
 # 2. Install Python dependencies
 echo "🐍 Installing Python dependencies..."
-source .venv/bin/activate
-uv install -r requirements.txt
-uv install -r requirements-prod.txt
+uv pip install -r requirements.txt
+uv pip install -r requirements-prod.txt
 
-# 3. Install Node dependencies and build Next.js
-echo "📦 Installing Node dependencies..."
-npm install
-
-echo "🏗️  Building Next.js..."
-npm run build
+# 3. Build Pelican blog
+echo "📝 Building static blog with Pelican..."
+pelican posts/ -o static/blog -s pelicanconf.py
 
 # 4. Run database migrations if schema changed
 echo "🗄️  Checking database..."
 # Uncomment if you have migrations:
 # psql $DATABASE_URL < schema.sql
 
-# 5. Restart services
-echo "🔄 Restarting services..."
+# 5. Restart Flask service
+echo "🔄 Restarting Flask service..."
 
-# Stop existing services
-sudo systemctl stop daily-discover-flask 2>/dev/null || true
-sudo systemctl stop daily-discover-next 2>/dev/null || true
+# Copy updated service file
+sudo cp systemd/daily-discover-flask.service /etc/systemd/system/
+sudo systemctl daemon-reload
 
-# Start Flask with Gunicorn
-echo "▶️  Starting Flask backend..."
-sudo systemctl start daily-discover-flask
-
-# Start Next.js
-echo "▶️  Starting Next.js frontend..."
-sudo systemctl start daily-discover-next
+# Restart Flask
+sudo systemctl restart daily-discover-flask
 
 # 6. Verify
 echo ""
 echo "✅ Deployment complete!"
-echo "Flask API: http://localhost:8080/api/health"
-echo "Next.js UI: http://localhost:3000"
+echo "Flask API & Web: http://localhost:8080"
+echo "Blog: http://localhost:8080/blog"

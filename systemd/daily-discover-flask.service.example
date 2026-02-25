@@ -4,10 +4,11 @@ After=network.target postgresql.service
 
 [Service]
 Type=simple
-User=gremlin
-WorkingDirectory=/home/gremlin/blagh
-ExecStart=/home/gremlin/.local/bin/uv run gunicorn app:app \
+User=YOUR_USERNAME
+WorkingDirectory=/path/to/your/project
+ExecStart=/path/to/uv run gunicorn asgi:application \
     -w 2 \
+    -k uvicorn.workers.UvicornWorker \
     --bind 0.0.0.0:8080 \
     --access-logfile /var/log/daily-discover/flask-access.log \
     --error-logfile /var/log/daily-discover/flask-error.log

@@ -1,5 +1,2 @@
 # Requirements for production deployment
-# uvicorn[standard] includes websockets, watchfiles, and other useful features
-uvicorn[standard]==0.27.0
-# a2wsgi converts WSGI (Flask) to ASGI (Uvicorn)
-a2wsgi==1.10.4
+gunicorn==21.2.0

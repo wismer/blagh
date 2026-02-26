@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Tag: {{ tag }} - {{ SITENAME }}{% endblock %}
+
+{% block content %}
+<h1>Posts tagged with "{{ tag }}"</h1>
+
+<section class="tagged-posts">
+    {% for article in articles %}
+    <article class="post-preview">
+        <header>
+            <h2><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h2>
+            <p class="meta">
+                <time datetime="{{ article.date.isoformat() }}">{{ article.locale_date }}</time>
+            </p>
+        </header>
+        
+        {% if article.summary %}
+        <div class="summary">
+            {{ article.summary }}
+        </div>
+        {% endif %}
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}

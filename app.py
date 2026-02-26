@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session, send_from_directory
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 from flask_cors import CORS
 import os
 from datetime import datetime
@@ -11,24 +11,16 @@ from gmail_service import (
     get_cached_emails,
     is_authenticated
 )
-from blog_service import (
-    scan_and_sync_posts,
-    get_all_posts,
-    get_post_by_slug,
-    get_posts_by_tag,
-    get_all_tags
-)
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
 
-# Enable CORS for Next.js dev server (port 3000) and production
+# Enable CORS for API access
 CORS(app, resources={
     r"/api/*": {
         "origins": [
-            "http://localhost:3000",  # Next.js dev server
             "http://localhost:8080",  # Flask dev server
             os.environ.get('FRONTEND_URL', 'https://yourdomain.com')  # Production
         ],
@@ -49,25 +41,25 @@ init_db_pool(DATABASE_URL)
 DEFAULT_USER_ID = '00000000-0000-0000-0000-000000000001'
 
 # ============================================================================
-# STATIC BLOG ROUTES (Pelican-generated at root)
+# WEB ROUTES
 # ============================================================================
 
 @app.route('/')
-def blog_index():
-    """Serve Pelican blog index at root"""
-    return send_from_directory('static/blog', 'index.html')
-
-@app.route('/<path:filename>')
-def serve_blog_or_static(filename):
-    """Serve Pelican blog posts and static assets"""
-    # Skip API and dashboard routes
-    if filename.startswith('api/') or filename.startswith('dashboard'):
-        return None
-    return send_from_directory('static/blog', filename)
-
-# ============================================================================
-# WEB ROUTES
-# ============================================================================
+def index():
+    """Redirect to dashboard or show info page"""
+    return """
+    <html>
+    <head><title>Daily Discover</title></head>
+    <body style="font-family: system-ui; max-width: 600px; margin: 50px auto; padding: 20px;">
+        <h1>Daily Discover</h1>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a> (protected)</li>
+            <li><a href="/api/health">API Health Check</a></li>
+            <li><a href="https://yourdomain.com">Blog</a> (hosted on Cloudflare Pages)</li>
+        </ul>
+    </body>
+    </html>
+    """
 
 @app.route('/dashboard')
 def dashboard():
@@ -359,93 +351,10 @@ def get_emails():
 
 
 # Blog routes
-@app.route('/api/posts')
-def get_posts():
-    """Get all blog posts"""
-    tag = request.args.get('tag')
-    
-    try:
-        if tag:
-            posts = get_posts_by_tag(DEFAULT_USER_ID, tag)
-        else:
-            posts = get_all_posts(DEFAULT_USER_ID, include_drafts=False)
-        
-        return jsonify({
-            'success': True,
-            'posts': posts,
-            'count': len(posts)
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
-
-@app.route('/api/posts/<slug>')
-def get_post(slug):
-    """Get a single blog post by slug"""
-    try:
-        post = get_post_by_slug(DEFAULT_USER_ID, slug)
-        
-        if not post:
-            return jsonify({
-                'success': False,
-                'error': 'Post not found'
-            }), 404
-        
-        return jsonify({
-            'success': True,
-            'post': post
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
-
-@app.route('/api/posts/sync', methods=['POST'])
-def sync_posts():
-    """Scan posts directory and sync with database"""
-    try:
-        count = scan_and_sync_posts(DEFAULT_USER_ID)
-        
-        ActivityLog.create(
-            DEFAULT_USER_ID,
-            action='posts_synced',
-            entity_type='blog',
-            details={'posts_synced': count}
-        )
-        
-        return jsonify({
-            'success': True,
-            'message': f'Synced {count} posts',
-            'count': count
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
-
-@app.route('/api/tags')
-def get_tags():
-    """Get all blog tags"""
-    try:
-        tags = get_all_tags(DEFAULT_USER_ID)
-        return jsonify({
-            'success': True,
-            'tags': tags,
-            'count': len(tags)
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
+# ============================================================================
+# BLOG API ENDPOINTS - Removed (Blog is static via Pelican)
+# Blog content is served directly from / and /blog/* routes above
+# ============================================================================
 
 if __name__ == '__main__':
     app.run(

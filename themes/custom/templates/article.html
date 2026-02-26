@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} - {{ SITENAME }}{% endblock %}
+
+{% block extra_head %}
+{% if article.description %}
+<meta name="description" content="{{ article.description }}">
+{% endif %}
+{% if article.tags %}
+<meta name="keywords" content="{{ article.tags|join(', ') }}">
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<article class="post">
+    <header class="post-header">
+        <h1>{{ article.title }}</h1>
+        <p class="meta">
+            <time datetime="{{ article.date.isoformat() }}">{{ article.locale_date }}</time>
+            {% if article.author %}
+            by <span class="author">{{ article.author }}</span>
+            {% endif %}
+            {% if article.category %}
+            in <a href="{{ SITEURL }}/{{ article.category.url }}">{{ article.category }}</a>
+            {% endif %}
+        </p>
+        
+        {% if article.tags %}
+        <ul class="tags">
+            {% for tag in article.tags %}
+            <li><a href="{{ SITEURL }}/{{ tag.url }}">#{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </header>
+    
+    <div class="post-content">
+        {{ article.content }}
+    </div>
+    
+    <footer class="post-footer">
+        {% if article.modified %}
+        <p class="modified">Last updated: <time datetime="{{ article.modified.isoformat() }}">{{ article.modified.strftime('%Y-%m-%d') }}</time></p>
+        {% endif %}
+    </footer>
+</article>
+
+{% if article.related_posts %}
+<section class="related-posts">
+    <h2>Related Posts</h2>
+    <ul>
+        {% for related in article.related_posts %}
+        <li><a href="{{ SITEURL }}/{{ related.url }}">{{ related.title }}</a></li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}

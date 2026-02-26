@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ SITENAME }}{% if SITESUBTITLE %} - {{ SITESUBTITLE }}{% endif %}{% endblock %}
+
+{% block content %}
+<section class="blog-posts">
+    {% for article in articles_page.object_list %}
+    <article class="post-preview">
+        <header>
+            <h2><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h2>
+            <p class="meta">
+                <time datetime="{{ article.date.isoformat() }}">{{ article.locale_date }}</time>
+                {% if article.author %}
+                by <span class="author">{{ article.author }}</span>
+                {% endif %}
+            </p>
+        </header>
+        
+        {% if article.summary %}
+        <div class="summary">
+            {{ article.summary }}
+        </div>
+        {% endif %}
+        
+        <footer>
+            <a href="{{ SITEURL }}/{{ article.url }}" class="read-more">Read more →</a>
+            
+            {% if article.tags %}
+            <ul class="tags">
+                {% for tag in article.tags %}
+                <li><a href="{{ SITEURL }}/{{ tag.url }}">#{{ tag }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </footer>
+    </article>
+    {% endfor %}
+</section>
+
+{% if articles_page.has_other_pages() %}
+<nav class="pagination">
+    {% if articles_page.has_previous() %}
+    <a href="{{ SITEURL }}/{{ articles_previous_page.url }}" class="prev">&larr; Newer</a>
+    {% endif %}
+    
+    <span class="page-info">Page {{ articles_page.number }} of {{ articles_paginator.num_pages }}</span>
+    
+    {% if articles_page.has_next() %}
+    <a href="{{ SITEURL }}/{{ articles_next_page.url }}" class="next">Older &rarr;</a>
+    {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

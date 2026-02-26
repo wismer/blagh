@@ -3,14 +3,17 @@
 
 # Basic Settings
 AUTHOR = 'Daily Discover'
-SITENAME = 'Daily Discover Blog'
-SITEURL = ''  # Leave empty for dev, set in production
+SITENAME = 'Daily Discover'
+SITEURL = 'https://yourdomain.com'  # Update with your actual domain
 
 PATH = 'posts'
-OUTPUT_PATH = 'static/blog'
+OUTPUT_PATH = 'output'  # Changed from static/blog for Cloudflare Pages
 
 TIMEZONE = 'America/Los_Angeles'
 DEFAULT_LANG = 'en'
+
+# Theme
+THEME = 'themes/custom'
 
 # Feed generation (disabled for local development)
 FEED_ALL_ATOM = None

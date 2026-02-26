@@ -1,5 +1,6 @@
 #!/bin/bash
 # Production deployment script for Raspberry Pi
+# Blog is deployed separately to Cloudflare Pages
 
 set -e  # Exit on error
 set -o pipefail  # Catch errors in pipes
@@ -7,7 +8,7 @@ set -o pipefail  # Catch errors in pipes
 # Error handler - shows which command failed
 trap 'echo "❌ Error on line $LINENO: $BASH_COMMAND" >&2' ERR
 
-echo "🚀 Deploying Daily Discover (Flask + Pelican)"
+echo "🚀 Deploying Daily Discover Flask Backend"
 echo ""
 
 # 1. Update code
@@ -19,9 +20,8 @@ echo "🐍 Installing Python dependencies..."
 uv pip install -r requirements.txt
 uv pip install -r requirements-prod.txt
 
-# 3. Build Pelican blog
-echo "📝 Building static blog with Pelican..."
-pelican posts/ -o static/blog -s pelicanconf.py
+# Note: Blog is deployed to Cloudflare Pages separately
+# No Pelican build needed on Pi
 
 # 4. Run database migrations if schema changed
 echo "🗄️  Checking database..."
@@ -41,5 +41,6 @@ sudo systemctl restart daily-discover-flask
 # 6. Verify
 echo ""
 echo "✅ Deployment complete!"
-echo "Flask API & Web: http://localhost:8080"
-echo "Blog: http://localhost:8080/blog"
+echo "Flask Dashboard: http://localhost:8080/dashboard"
+echo "Flask API: http://localhost:8080/api/health"
+echo "Blog: Deploy to Cloudflare Pages separately"

@@ -1,5 +1,6 @@
 # Python
 venv/
+.venv/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -49,6 +50,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Pelican output (deployed to Cloudflare Pages)
+output/
 
 # Deploy and systemd configs (contains system-specific paths)
 deploy.sh

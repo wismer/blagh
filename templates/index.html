@@ -322,54 +322,54 @@
         }
         
         // Test API endpoints
-        async function testAPI(endpoint) {
-            try {
-                let body;
-                if (endpoint === 'todos') {
-                    body = {
-                        text: `Test TODO item at ${new Date().toLocaleTimeString()}`,
-                        priority: 1
-                    };
-                } else if (endpoint === 'groceries') {
-                    body = {
-                        item_name: `Test item ${Math.floor(Math.random() * 100)}`,
-                        quantity: 1
-                    };
-                }
+        // async function testAPI(endpoint) {
+        //     try {
+        //         let body;
+        //         if (endpoint === 'todos') {
+        //             body = {
+        //                 text: `Test TODO item at ${new Date().toLocaleTimeString()}`,
+        //                 priority: 1
+        //             };
+        //         } else if (endpoint === 'groceries') {
+        //             body = {
+        //                 item_name: `Test item ${Math.floor(Math.random() * 100)}`,
+        //                 quantity: 1
+        //             };
+        //         }
                 
-                const response = await fetch(`/api/${endpoint}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(body)
-                });
-                const data = await response.json();
-                alert(`Success! ${data.message}`);
+        //         const response = await fetch(`/api/${endpoint}`, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify(body)
+        //         });
+        //         const data = await response.json();
+        //         alert(`Success! ${data.message}`);
                 
-                // Reload the appropriate list
-                if (endpoint === 'todos') {
-                    loadTodos();
-                } else if (endpoint === 'groceries') {
-                    loadGroceries();
-                }
-            } catch (error) {
-                alert(`Error: ${error.message}`);
-            }
-        }
+        //         // Reload the appropriate list
+        //         if (endpoint === 'todos') {
+        //             loadTodos();
+        //         } else if (endpoint === 'groceries') {
+        //             loadGroceries();
+        //         }
+        //     } catch (error) {
+        //         alert(`Error: ${error.message}`);
+        //     }
+        // }
         
-        // Load initial data
-        checkHealth();
-        checkGmailStatus();
-        loadTodos();
-        loadGroceries();
+        // // Load initial data
+        // checkHealth();
+        // checkGmailStatus();
+        // loadTodos();
+        // loadGroceries();
         
-        // Refresh data every 30 seconds
-        setInterval(() => {
-            loadTodos();
-            loadGroceries();
-            loadEmails();
-        }, 30000);
+        // // Refresh data every 30 seconds
+        // setInterval(() => {
+        //     loadTodos();
+        //     loadGroceries();
+        //     loadEmails();
+        // }, 30000);
     </script>
 </body>
 </html>

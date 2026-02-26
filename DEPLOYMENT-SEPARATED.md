@@ -5,11 +5,15 @@
 **Blog (Static):** Pelican → Cloudflare Pages  
 **Dashboard/API (Dynamic):** Flask → Raspberry Pi
 
+**Domain Structure:**
+- `gremlin.computer` → Blog (Cloudflare Pages)
+- `dashboard.gremlin.computer` → Flask dashboard/API (Pi via Tunnel)
+
 ```
-yourdomain.com          → Cloudflare Pages (blog)
+gremlin.computer          → Cloudflare Pages (blog)
   └─ Pelican static site
   
-dashboard.yourdomain.com → Raspberry Pi (Flask)
+dashboard.gremlin.computer → Raspberry Pi (Flask)
   └─ /dashboard         → Protected dashboard UI
   └─ /api/*             → APIs (todos, groceries, gmail)
 ```
@@ -36,10 +40,9 @@ dashboard.yourdomain.com → Raspberry Pi (Flask)
      - **Build output**: `output`
      - **Root directory**: `/`
 
-2. **Update domain in publishconf.py**
-```python
-SITEURL = 'https://yourdomain.com'
-```
+2. **Domain is already configured**
+   - Your site will be at `gremlin.computer`
+   - Cloudflare Pages will auto-configure DNS
 
 3. **Push to trigger deployment**
 ```bash
@@ -119,6 +122,26 @@ sudo systemctl start daily-discover-flask
 
 ---
 
+### Migrate from Existing Tunnel Setup
+
+If you already have `gremlin.computer` pointing to your Pi:
+
+```bash
+# On your Pi, update tunnel config
+nano ~/.cloudflared/config.yml
+# Change hostname from gremlin.computer to dashboard.gremlin.computer
+
+# Update DNS route
+cloudflared tunnel route dns daily-discover dashboard.gremlin.computer
+
+# Restart cloudflared
+sudo systemctl restart cloudflared
+```
+
+Then add `gremlin.computer` as custom domain in Cloudflare Pages.
+
+---
+
 ## Part 3: Cloudflare Tunnel Setup
 
 Connect your Pi to Cloudflare securely (no port forwarding needed).
@@ -135,7 +158,7 @@ sudo dpkg -i cloudflared-linux-arm64.deb
 ```bash
 cloudflared tunnel login
 cloudflared tunnel create daily-discover
-cloudflared tunnel route dns daily-discover dashboard.yourdomain.com
+cloudflared tunnel route dns daily-discover dashboard.gremlin.computer
 ```
 
 ### Configure Tunnel
@@ -147,7 +170,7 @@ tunnel: <TUNNEL-ID>
 credentials-file: /home/gremlin/.cloudflared/<TUNNEL-ID>.json
 
 ingress:
-  - hostname: dashboard.yourdomain.com
+  - hostname: dashboard.gremlin.computer
     service: http://localhost:8080
   - service: http_status:404
 ```
@@ -164,12 +187,15 @@ sudo systemctl enable cloudflared
 
 ## DNS Configuration
 
-In Cloudflare DNS:
+**Step 1:** Remove existing `gremlin.computer` DNS records (A or CNAME pointing to Pi)
+
+**Step 2:** In Cloudflare Pages, add custom domain `gremlin.computer` (it will create DNS automatically)
+
+**Step 3:** Configure subdomain for Pi:
 
 | Type | Name | Content | Proxy |
 |------|------|---------|-------|
-| CNAME | yourdomain.com | (Cloudflare Pages URL) | ✅ Proxied |
-| CNAME | dashboard | (Tunnel CNAME) | ✅ Proxied |
+| CNAME | dashboard | (Tunnel ID).cfargotunnel.com | ✅ Proxied |
 
 ---
 
@@ -179,7 +205,7 @@ In Cloudflare DNS:
 
 1. Go to **Cloudflare Zero Trust** → Access → Applications
 2. Create new application:
-   - **Domain**: `dashboard.yourdomain.com`
+  - **Domain**: `dashboard.gremlin.computer`
    - **Path**: `/dashboard`
    - **Policy**: Require your email or Google Workspace
 

@@ -7,6 +7,10 @@
 - **Pelican**: Static blog generation from Markdown
 - **PostgreSQL**: Database for todos, groceries, activity logs
 
+**Production domain mapping:**
+- `gremlin.computer` → Blog (Cloudflare Pages)
+- `dashboard.gremlin.computer` → Flask dashboard/API on Pi (via Cloudflare Tunnel)
+
 ## Local Development
 
 ### Prerequisites
@@ -97,7 +101,6 @@ sudo systemctl start daily-discover-flask
 This script:
 - Pulls latest code
 - Installs Python dependencies
-- Rebuilds Pelican blog
 - Restarts Flask service
 
 ## Routes
@@ -118,6 +121,10 @@ This script:
 
 ## Cloudflare Integration
 
+For separated hosting in production:
+- Keep blog on Cloudflare Pages at `gremlin.computer`
+- Point tunnel hostname to Flask at `dashboard.gremlin.computer`
+
 ### Option 1: Cloudflare Tunnel (Recommended)
 
 ```bash
@@ -128,7 +135,7 @@ sudo dpkg -i cloudflared-linux-arm64.deb
 # Authenticate and create tunnel
 cloudflared tunnel login
 cloudflared tunnel create daily-discover
-cloudflared tunnel route dns daily-discover yourdomain.com
+cloudflared tunnel route dns daily-discover dashboard.gremlin.computer
 
 # Configure
 cat > ~/.cloudflared/config.yml << EOF
@@ -136,7 +143,7 @@ tunnel: <TUNNEL-ID>
 credentials-file: /home/gremlin/.cloudflared/<TUNNEL-ID>.json
 
 ingress:
-  - hostname: yourdomain.com
+  - hostname: dashboard.gremlin.computer
     service: http://localhost:8080
   - service: http_status:404
 EOF

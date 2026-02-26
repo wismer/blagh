@@ -4,7 +4,7 @@
 # Basic Settings
 AUTHOR = 'Daily Discover'
 SITENAME = 'Daily Discover'
-SITEURL = 'https://yourdomain.com'  # Update with your actual domain
+SITEURL = 'https://gremlin.computer'  # Production domain
 
 PATH = 'posts'
 OUTPUT_PATH = 'output'  # Changed from static/blog for Cloudflare Pages

@@ -10,8 +10,8 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-# Production URL (update this!)
-SITEURL = 'https://yourdomain.com'
+# Production URL
+SITEURL = 'https://gremlin.computer'
 RELATIVE_URLS = False
 
 # Feed generation for production

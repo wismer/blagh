@@ -55,7 +55,7 @@ def index():
         <ul>
             <li><a href="/dashboard">Dashboard</a> (protected)</li>
             <li><a href="/api/health">API Health Check</a></li>
-            <li><a href="https://yourdomain.com">Blog</a> (hosted on Cloudflare Pages)</li>
+            <li><a href="https://gremlin.computer">Blog</a> (hosted on Cloudflare Pages)</li>
         </ul>
     </body>
     </html>

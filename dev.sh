@@ -6,7 +6,7 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}Starting Daily Discover (Flask + Pelican)${NC}"
+echo -e "${GREEN}Starting Daily Discover (Flask + Astro)${NC}"
 echo ""
 
 # Check if virtual environment is activated
@@ -25,7 +25,7 @@ echo -e "${GREEN}✓ Flask running at http://localhost:8080${NC}"
 echo -e "${GREEN}✓ Dashboard at http://localhost:8080/dashboard${NC}"
 echo -e "${GREEN}✓ API at http://localhost:8080/api/health${NC}"
 echo ""
-echo "Blog development: Run 'pelican --listen -r' in another terminal"
+echo "Blog development: Run 'cd blog && npm run dev' in another terminal (http://localhost:4321)"
 echo ""
 echo "Press CTRL+C to stop server"
 

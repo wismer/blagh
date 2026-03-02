@@ -352,7 +352,7 @@ def get_emails():
 
 # Blog routes
 # ============================================================================
-# BLOG API ENDPOINTS - Removed (Blog is static via Pelican)
+# BLOG API ENDPOINTS - Removed (Blog is static via Astro, deployed to Cloudflare Pages)
 # Blog content is served directly from / and /blog/* routes above
 # ============================================================================
 

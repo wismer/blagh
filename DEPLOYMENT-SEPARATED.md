@@ -2,7 +2,7 @@
 
 ## Architecture
 
-**Blog (Static):** Pelican → Cloudflare Pages  
+**Blog (Static):** Astro → Cloudflare Pages  
 **Dashboard/API (Dynamic):** Flask → Raspberry Pi
 
 **Domain Structure:**
@@ -11,7 +11,7 @@
 
 ```
 gremlin.computer          → Cloudflare Pages (blog)
-  └─ Pelican static site
+  └─ Astro static site
   
 dashboard.gremlin.computer → Raspberry Pi (Flask)
   └─ /dashboard         → Protected dashboard UI
@@ -36,9 +36,9 @@ dashboard.gremlin.computer → Raspberry Pi (Flask)
    - Go to Cloudflare Dashboard → Pages
    - Connect your GitHub repo
    - Configure build:
-     - **Build command**: `pelican posts/ -o output -s publishconf.py`
-     - **Build output**: `output`
-     - **Root directory**: `/`
+     - **Root directory**: `blog`
+     - **Build command**: `npm run build`
+     - **Build output**: `dist`
 
 2. **Domain is already configured**
    - Your site will be at `gremlin.computer`
@@ -54,24 +54,22 @@ git push
 ### Local Blog Development
 
 ```bash
-# Build blog locally
-pelican posts/ -o output -s pelicanconf.py
-
-# Preview with Pelican's dev server
-pelican --listen -r
-
-# Visit http://localhost:8000
+cd blog
+npm run dev
+# Visit http://localhost:4321
 ```
 
 ### Writing Posts
 
-Create markdown in `posts/`:
+Create markdown in `blog/src/content/blog/`:
 
 ```markdown
-Title: My Post Title
-Date: 2026-02-26 10:00
-Tags: python, flask
-Summary: Brief description
+---
+title: My Post Title
+pubDate: 2026-02-26
+description: Brief description
+tags: [python, self-hosting]
+---
 
 Your content here...
 ```
@@ -215,10 +213,10 @@ Now only authorized users can access the dashboard!
 
 ## Local Development
 
-### Blog (Pelican)
+### Blog (Astro)
 ```bash
-pelican --listen -r
-# Visit http://localhost:8000
+cd blog && npm run dev
+# Visit http://localhost:4321
 ```
 
 ### Dashboard/API (Flask)

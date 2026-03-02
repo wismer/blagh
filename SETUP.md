@@ -1,10 +1,10 @@
-# Daily Discover - Flask + Pelican Setup
+# Daily Discover - Flask + Astro Setup
 
 ## Architecture
 
 **Daily Discover** is a personal dashboard with a static blog:
 - **Flask** (port 8080): Python web server, APIs, dashboard
-- **Pelican**: Static blog generation from Markdown
+- **Astro**: Static blog generation from Markdown (lives in `blog/`)
 - **PostgreSQL**: Database for todos, groceries, activity logs
 
 **Production domain mapping:**
@@ -44,7 +44,7 @@ psql -U matt -d daily_discover < schema.sql
 
 4. **Build blog**
 ```bash
-pelican posts/ -o static/blog -s pelicanconf.py
+cd blog && npm run build && cd ..
 ```
 
 5. **Run Flask**
@@ -159,32 +159,42 @@ sudo systemctl start cloudflared
 2. Enable Cloudflare proxy (orange cloud)
 3. Set up Page Rules for caching
 
-## Pelican Blog
+## Astro Blog
 
 ### Writing Posts
 
-Create markdown files in `posts/`:
+Create markdown files in `blog/src/content/blog/`:
 
 ```markdown
-Title: My Post
-Date: 2026-02-26
-Tags: python, flask
-Summary: A brief summary
+---
+title: My Post
+pubDate: 2026-02-26
+description: A brief summary
+tags: [python, self-hosting]
+---
 
 Your content here...
+```
+
+### Dev Server
+
+```bash
+cd blog && npm run dev
+# Visit http://localhost:4321
 ```
 
 ### Build Blog
 
 ```bash
-pelican posts/ -o static/blog -s pelicanconf.py
+cd blog && npm run build
+# Output goes to blog/dist/
 ```
 
 ### Customize Theme
 
-Edit files in `themes/custom/`:
-- `templates/*.html` - HTML structure
-- `static/css/style.css` - Styling
+Edit files in `blog/src/`:
+- `layouts/*.astro` - Page structure
+- `styles/global.css` - Styling
 
 ## Troubleshooting
 
@@ -215,4 +225,4 @@ kill -9 <PID>
 
 ---
 
-© 2026 Daily Discover. Powered by Flask + Pelican.
+© 2026 Daily Discover. Powered by Flask + Astro.

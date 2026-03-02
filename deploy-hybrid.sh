@@ -20,8 +20,8 @@ echo "🐍 Installing Python dependencies..."
 uv pip install -r requirements.txt
 uv pip install -r requirements-prod.txt
 
-# Note: Blog is deployed to Cloudflare Pages separately
-# No Pelican build needed on Pi
+# Note: Blog (Astro) is deployed to Cloudflare Pages separately (blog/ subdirectory)
+# No Astro build needed on Pi
 
 # 4. Run database migrations if schema changed
 echo "🗄️  Checking database..."

@@ -3,7 +3,7 @@ title: "Computer for one, please"
 description: "When AI has all the answers, how do you know what questions to ask?"
 pubDate: "2026-02-26"
 tags: ["meta", "pet-project", "ai"]
-draft: true
+draft: false
 ---
 
 I *really* like mini-computers & microcontrollers. Maybe because I can hold such powerful and <a href="https://en.wikipedia.org/wiki/Clarke%27s_three_laws" rel="_self">magical</a> things in the palm of my hand. I can write things to it, and have them interact with the world that I know and that feeling is (forgive me here), _electrifying_. 
